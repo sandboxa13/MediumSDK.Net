@@ -1,4 +1,4 @@
-﻿namespace MediumSDK.Domain
+﻿namespace MediumSDK.Net.Domain
 {
     public enum Scope
     {

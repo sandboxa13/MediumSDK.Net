@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace MediumSDK.Domain
+namespace MediumSDK.Net.Domain
 {
     public class MediumClient
     {   

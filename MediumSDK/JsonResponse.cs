@@ -1,4 +1,4 @@
-﻿namespace MediumSDK
+﻿namespace MediumSDK.Net
 {
     public class JsonResponse<T>
     {
