@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediumSDK", "MediumSDK\MediumSDK.csproj", "{D1B4450C-E491-4636-B7A4-25CA6CEC6DA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediumSDK", "MediumSDK\MediumSDK.csproj", "{D1B4450C-E491-4636-B7A4-25CA6CEC6DA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testsdk", "testsdk\testsdk.csproj", "{EEB29D71-8A14-4182-A753-49E59F2F692D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D1B4450C-E491-4636-B7A4-25CA6CEC6DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1B4450C-E491-4636-B7A4-25CA6CEC6DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1B4450C-E491-4636-B7A4-25CA6CEC6DA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEB29D71-8A14-4182-A753-49E59F2F692D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB29D71-8A14-4182-A753-49E59F2F692D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB29D71-8A14-4182-A753-49E59F2F692D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB29D71-8A14-4182-A753-49E59F2F692D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

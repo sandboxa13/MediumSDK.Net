@@ -49,7 +49,7 @@ namespace MediumSDK.Domain
         public async Task<Token> AuthenticateUser()
         {
             var tokenRequestBody =
-                $"code={GetAuthCode()}&client_id={ClientId}&client_secret={ClientSecret}&grant_type=authorization_code&redirect_uri={Uri.EscapeDataString(MediumRoutes.RedirectUrl)}";
+                $"code={GetAuthCode().Result}&client_id={ClientId}&client_secret={ClientSecret}&grant_type=authorization_code&redirect_uri={Uri.EscapeDataString(MediumRoutes.RedirectUrl)}";
 
             var tokenRequest = (HttpWebRequest)WebRequest.Create(MediumRoutes.Token);
             tokenRequest.Method = "POST";
@@ -61,16 +61,24 @@ namespace MediumSDK.Domain
             await stream.WriteAsync(byteVersion, 0, byteVersion.Length);
             stream.Close();
 
-            var tokenResponse = await tokenRequest.GetResponseAsync();
-
-            using (var reader = new StreamReader(tokenResponse.GetResponseStream() ?? throw new NullReferenceException()))
+            try
             {
-                var responseText = await reader.ReadToEndAsync();
+                var tokenResponse = tokenRequest.GetResponse();
 
-                Token = JsonConvert.DeserializeObject<Token>(responseText);
+                using (var reader = new StreamReader(tokenResponse.GetResponseStream() ?? throw new NullReferenceException()))
+                {
+                    var responseText = await reader.ReadToEndAsync();
+
+                    Token = JsonConvert.DeserializeObject<Token>(responseText);
+                }
+
+                return await Task.FromResult(Token);
             }
-
-            return await Task.FromResult(Token);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public Task<MediumUser> GetUser()
