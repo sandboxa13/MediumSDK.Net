@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace MediumSDK.Net.Domain
 {
     public class MediumClient
-    {   
+    {
         public MediumClient(string clientId, string clientSecret, string state)
         {
             ClientId = clientId;
@@ -61,24 +61,17 @@ namespace MediumSDK.Net.Domain
             await stream.WriteAsync(byteVersion, 0, byteVersion.Length);
             stream.Close();
 
-            try
+            var tokenResponse = tokenRequest.GetResponse();
+
+            using (var reader = new StreamReader(tokenResponse.GetResponseStream() ?? throw new NullReferenceException()))
             {
-                var tokenResponse = tokenRequest.GetResponse();
+                var responseText = await reader.ReadToEndAsync();
 
-                using (var reader = new StreamReader(tokenResponse.GetResponseStream() ?? throw new NullReferenceException()))
-                {
-                    var responseText = await reader.ReadToEndAsync();
-
-                    Token = JsonConvert.DeserializeObject<Token>(responseText);
-                }
-
-                return await Task.FromResult(Token);
+                Token = JsonConvert.DeserializeObject<Token>(responseText);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            return await Task.FromResult(Token);
+
         }
 
         public Task<MediumUser> GetUser()
@@ -114,10 +107,10 @@ namespace MediumSDK.Net.Domain
             var proc = new Process
             {
                 StartInfo =
-                {
-                    UseShellExecute = true,
-                    FileName = url
-                }
+                    {
+                        UseShellExecute = true,
+                        FileName = url
+                    }
             };
             proc.Start();
 
@@ -132,11 +125,13 @@ namespace MediumSDK.Net.Domain
             {
                 responseOutput.Close();
                 http.Stop();
+                http.Close();
             });
 
             var code = context.Request.QueryString.Get("code");
 
             return await Task.FromResult(code);
+
         }
     }
 }
