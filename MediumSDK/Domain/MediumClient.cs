@@ -48,8 +48,10 @@ namespace MediumSDK.Net.Domain
 
         public async Task<Token> AuthenticateUser()
         {
+            var code = await GetAuthCode();
+
             var tokenRequestBody =
-                $"code={GetAuthCode().Result}&client_id={ClientId}&client_secret={ClientSecret}&grant_type=authorization_code&redirect_uri={Uri.EscapeDataString(MediumRoutes.RedirectUrl)}";
+                $"code={code}&client_id={ClientId}&client_secret={ClientSecret}&grant_type=authorization_code&redirect_uri={Uri.EscapeDataString(MediumRoutes.RedirectUrl)}";
 
             var tokenRequest = (HttpWebRequest)WebRequest.Create(MediumRoutes.Token);
             tokenRequest.Method = "POST";
