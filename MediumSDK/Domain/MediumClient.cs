@@ -124,14 +124,12 @@ namespace MediumSDK.Net.Domain
             await responseOutput.WriteAsync(buffer, 0, buffer.Length).ContinueWith((task) =>
             {
                 responseOutput.Close();
-                http.Stop();
-                http.Close();
             });
 
             var code = context.Request.QueryString.Get("code");
+            http.Close();
 
             return await Task.FromResult(code);
-
         }
     }
 }
