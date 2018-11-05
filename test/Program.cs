@@ -1,5 +1,4 @@
-﻿using System;
-using MediumSDK.Net.Domain;
+﻿using MediumSDK.Net.Domain;
 
 namespace test
 {

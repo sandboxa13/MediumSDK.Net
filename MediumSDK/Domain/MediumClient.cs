@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -10,6 +10,8 @@ namespace MediumSDK.Net.Domain
 {
     public class MediumClient
     {
+        private HttpListener _httpListener;
+
         public MediumClient(string clientId, string clientSecret, string state)
         {
             ClientId = clientId;
@@ -46,8 +48,11 @@ namespace MediumSDK.Net.Domain
         /// </summary>
         public string State { get; private set; }
 
+
         public async Task<Token> AuthenticateUser()
         {
+            Task.Run(() => StartTimer());
+
             var code = await GetAuthCode();
 
             var tokenRequestBody =
@@ -73,7 +78,6 @@ namespace MediumSDK.Net.Domain
             }
 
             return await Task.FromResult(Token);
-
         }
 
         public Task<MediumUser> GetUser()
@@ -96,13 +100,11 @@ namespace MediumSDK.Net.Domain
             }
         }
 
-
         private async Task<string> GetAuthCode()
         {
-            var http = new HttpListener();
-            http.Prefixes.Add(MediumRoutes.RedirectUrl);
-            http.Start();
-
+            _httpListener = new HttpListener();
+            _httpListener.Prefixes.Add(MediumRoutes.RedirectUrl);
+            _httpListener.Start();
             var url =
                 $"{MediumRoutes.Authorize}?client_id={ClientId}&scope=basicProfile,publishPost&state={State}&response_type=code&redirect_uri={MediumRoutes.RedirectUrl}";
 
@@ -116,7 +118,7 @@ namespace MediumSDK.Net.Domain
             };
             proc.Start();
 
-            var context = await http.GetContextAsync();
+            var context = await _httpListener.GetContextAsync();
             var response = context.Response;
             var responseString = "<html><head><meta http-equiv=\'refresh\' content=\'10;url=https://google.com\'></head><body>Please return to the app.</body></html>";
             var buffer = Encoding.UTF8.GetBytes(responseString);
@@ -129,9 +131,27 @@ namespace MediumSDK.Net.Domain
             });
 
             var code = context.Request.QueryString.Get("code");
-            http.Close();
+            _httpListener.Close();
 
-            return await Task.FromResult(code);
+            return code;
+        }   
+
+        private void StartTimer()
+        {
+            var countDown = 60;
+
+            while (true)
+            {
+                if (countDown == 0)
+                {
+                    _httpListener.Stop();
+                    _httpListener.Close();
+                    break;
+                }
+
+                countDown--;
+                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+            }
         }
     }
 }
