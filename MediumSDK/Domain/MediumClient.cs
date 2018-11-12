@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MediumSDK.Net.Domain
 {
-    public class MediumClient
+    public class MediumClient : IMediumClient
     {
         private HttpListener _httpListener;
 
@@ -22,31 +22,31 @@ namespace MediumSDK.Net.Domain
         /// <summary>
         /// Medium user token
         /// </summary>
-        public Token Token { get; private set; }
+        public Token Token { get; set; }
 
 
         /// <summary>
         /// Medium user
         /// </summary>
-        public MediumUser User { get; private set; }
+        public MediumUser User { get; set; }
 
 
         /// <summary>
         /// Your client secret
         /// </summary>
-        public string ClientSecret { get; private set; }
+        public string ClientSecret { get; set; }
 
 
         /// <summary>
         /// Your client ID  
         /// </summary>
-        public string ClientId { get; private set; }
+        public string ClientId { get; set; }
 
 
         /// <summary>   
         /// State
         /// </summary>
-        public string State { get; private set; }
+        public string State { get; set; }
 
 
         public async Task<Token> AuthenticateUser()
@@ -134,7 +134,7 @@ namespace MediumSDK.Net.Domain
             _httpListener.Close();
 
             return code;
-        }   
+        }
 
         private void StartTimer()
         {
