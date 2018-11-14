@@ -4,19 +4,25 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DryIocAttributes;
 using Newtonsoft.Json;
 
 namespace MediumSDK.Net.Domain
 {
-    public class MediumClient : IMediumClient
+    [Reuse(ReuseType.Singleton)]
+    [ExportEx(typeof(IMediumClient))]
+    public class MediumClient : IMediumClient   
     {
         private HttpListener _httpListener;
 
-        public MediumClient(string clientId, string clientSecret, string state)
+        public MediumClient()
         {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-            State = state;
+            ClientId = "ce250fa7c114";
+            ClientSecret = "bb152d21f43b20de5174495f488cd71aede8efaa";
+            State = "text";
+
+            Token = new Token();
+            User = new MediumUser();
         }
 
         /// <summary>
