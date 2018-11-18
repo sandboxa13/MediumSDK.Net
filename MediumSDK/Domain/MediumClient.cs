@@ -88,22 +88,17 @@ namespace MediumSDK.Net.Domain
 
         public Task<MediumUser> GetUser()
         {
-            if (User == null)
-            {
-                var tokenRequest = (HttpWebRequest)WebRequest.Create(MediumRoutes.UserProfile);
-                tokenRequest.Method = "GET";
-                tokenRequest.ContentType = "application/x-www-form-urlencoded";
-                tokenRequest.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-                tokenRequest.Headers["Authorization"] = "Bearer " + Token;
+            if (Token.AccessToken == null) return Task.FromResult(User);
 
-                var user = tokenRequest.GetResponseJson<MediumUser>();
+            var tokenRequest = (HttpWebRequest)WebRequest.Create(MediumRoutes.UserProfile);
+            tokenRequest.Method = "GET";
+            tokenRequest.ContentType = "application/x-www-form-urlencoded";
+            tokenRequest.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            tokenRequest.Headers["Authorization"] = "Bearer " + Token.AccessToken;
 
-                return Task.FromResult(user);
-            }
-            else
-            {
-                return Task.FromResult(User);
-            }
+            var user = tokenRequest.GetResponseJson<MediumUser>();
+
+            return Task.FromResult(user);
         }
 
         private async Task<string> GetAuthCode()
